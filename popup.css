@@ -1,0 +1,84 @@
+body {
+  width: 320px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  padding: 15px;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.3em;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+button {
+  background: #e94560;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin: 5px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+button:hover {
+  background: #ff6b6b;
+}
+
+#packs-container {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.pack {
+  background: #16213e;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.pack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pack-name {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pack-words {
+  font-size: 0.75em;
+  color: #ccc;
+  margin-top: 2px;
+}
+
+.pack-actions button {
+  background: transparent;
+  color: #ccc;
+  padding: 2px 5px;
+  margin-left: 4px;
+}
+
+.pack-actions button:hover {
+  color: white;
+}
+
+.dragging {
+  opacity: 0.5;
+  border: 1px dashed #e94560;
+}
+
+/* Estilo para el minimodal de imagen */
+#image-picker-modal input[type="file"] {
+  background: #0f3460;
+  border: 1px solid #ccc;
+  padding: 4px;
+  color: white;
+}

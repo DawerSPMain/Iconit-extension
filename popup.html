@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>Icon!t</h1>
+  <div id="packs-container"></div>
+  <button id="add-pack">+ Nuevo Pack</button>
+  <br><br>
+  <button id="export-packs"> Exportar Packs</button>
+  <input type="file" id="import-packs" accept=".json" style="display:none">
+  <button id="import-btn"> Importar Packs</button>
+
+  <!-- Minimodal solo para elegir imagen -->
+  <div id="image-picker-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#1a1a2e; padding:20px; border-radius:8px; text-align:center; color:white; width:260px;">
+      <h3 style="margin-top:0;">Subir icono (PNG)</h3>
+      <input type="file" id="img-file" accept="image/png" style="margin-bottom:15px; display:block; width:100%; color:white;">
+      <div style="display:flex; justify-content:space-between;">
+        <button id="img-cancel" style="background:#666;">Cancelar</button>
+        <button id="img-skip">Mantener actual</button>
+        <button id="img-save">Guardar con imagen</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
