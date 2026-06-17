@@ -2,6 +2,8 @@
 
 let packs = [];
 
+const TWEET_TEXT_SELECTOR = '[data-testid="tweetText"]';
+
 // --------------------------------------------------------------
 // 1. MAPEO DE VARIANTES UNICODE A ASCII
 // --------------------------------------------------------------
@@ -74,23 +76,45 @@ chrome.runtime.onMessage.addListener((message) => {
 // 3. PROCESAMIENTO DE TEXTO MEJORADO
 // --------------------------------------------------------------
 function processDocument() {
+  const tweetElements = document.querySelectorAll(TWEET_TEXT_SELECTOR);
+
+  tweetElements.forEach(processTweetTextElement);
+}
+
+function processTweetTextElement(tweetElement) {
   const walker = document.createTreeWalker(
-    document.body,
+    tweetElement,
     NodeFilter.SHOW_TEXT,
     {
-      acceptNode: function(node) {
-        if (node.parentElement.closest('script, style, noscript, .icon-it-processed')) {
+      acceptNode(node) {
+        const parent = node.parentElement;
+
+        if (!parent) {
           return NodeFilter.FILTER_REJECT;
         }
-        return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+
+        if (
+          parent.closest(
+            'script, style, noscript, .icon-it-processed'
+          )
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
+        return node.textContent.trim()
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT;
       }
     }
   );
-  let node;
+
   const nodesToProcess = [];
-  while (node = walker.nextNode()) {
+  let node;
+
+  while ((node = walker.nextNode())) {
     nodesToProcess.push(node);
   }
+
   nodesToProcess.forEach(processTextNode);
 }
 
@@ -166,7 +190,7 @@ function escapeRegExp(string) {
 }
 
 // --------------------------------------------------------------
-// 4. OBSERVER CON FALLBACK PARA FACEBOOK
+// 4. OBSERVER FOR DYNAMIC X CONTENT
 // --------------------------------------------------------------
 function observeMutations() {
   const observer = new MutationObserver((mutations) => {
@@ -202,20 +226,27 @@ function observeMutations() {
 }
 
 function processSubtree(rootElement) {
-  const walker = document.createTreeWalker(
-    rootElement,
-    NodeFilter.SHOW_TEXT,
-    {
-      acceptNode: function(n) {
-        if (n.parentElement.closest('script, style, noscript, .icon-it-processed')) {
-          return NodeFilter.FILTER_REJECT;
-        }
-        return n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-      }
-    }
-  );
-  let node;
-  while (node = walker.nextNode()) {
-    processTextNode(node);
+  if (!(rootElement instanceof Element)) {
+    return;
   }
+
+  const tweetElements = new Set();
+
+  const containingTweet = rootElement.closest(TWEET_TEXT_SELECTOR);
+
+  if (containingTweet) {
+    tweetElements.add(containingTweet);
+  }
+
+  if (rootElement.matches(TWEET_TEXT_SELECTOR)) {
+    tweetElements.add(rootElement);
+  }
+
+  rootElement
+    .querySelectorAll(TWEET_TEXT_SELECTOR)
+    .forEach((tweetElement) => {
+      tweetElements.add(tweetElement);
+    });
+
+  tweetElements.forEach(processTweetTextElement);
 }
