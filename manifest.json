@@ -1,10 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Icon!t",
-  "version": "1.0",
-  "description": "Añade iconos divertidos junto a palabras clave mientras navegas. 100% local, sin servidores.",
-  "permissions": ["storage", "activeTab"],
+  "version": "0.1.0",
+  "description": "Insert custom icons next to key words in Twitter posts. Inspired by the 3D games from the hit franchize Super Mario.",
+  "permissions": [
+    "storage"
+  ],
   "action": {
+    "default_title": "Open Icon!t",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
@@ -14,8 +17,13 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
